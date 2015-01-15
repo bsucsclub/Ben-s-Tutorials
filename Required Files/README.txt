@@ -1,4 +1,4 @@
-Before install extension: 
+Before installing extension: 
 1. Install DirectX
 2. Install XNA Framework 4.0 Redistribution
 3. Install XNA Game Studio 4.0 Platform Tools
