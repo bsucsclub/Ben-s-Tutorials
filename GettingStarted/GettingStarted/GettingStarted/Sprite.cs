@@ -159,7 +159,7 @@ namespace GettingStarted {
         /// </summary>
         public void CenterOrigin() {
             if (source == null) {
-                origin = new Vector2(source.Value.Width / 2.0f, source.Value.Height / 2.0f);
+                origin = new Vector2(source.Width / 2.0f, source.Height / 2.0f);
             }
             else {
                 origin = new Vector2(texture.Width / 2.0f, texture.Height / 2.0f);
@@ -177,7 +177,7 @@ namespace GettingStarted {
                 lowerRight += (scale.Equals(Vector2.One)) ? new Vector2(texture.Width, texture.Height) : scale * new Vector2(texture.Width, texture.Height);
             }
             else {
-                lowerRight += (scale.Equals(Vector2.One)) ? new Vector2(source.Value.Width, source.Value.Height) : scale * new Vector2(source.Value.Width, source.Value.Height);
+                lowerRight += (scale.Equals(Vector2.One)) ? new Vector2(source.Width, source.Height) : scale * new Vector2(source.Width, source.Height);
             }
 
             return (x_ >= position.X && x_ <= lowerRight.X) && (y_ >= position.Y && y_ <= lowerRight.Y);    
@@ -202,6 +202,8 @@ namespace GettingStarted {
         public virtual void Update(GameTime gameTime_) {
             // TO DO: Place update code here.
             source.X = currentSourceX * 40;
+
+
         }
         /// <summary>
         /// Draws this sprite.
