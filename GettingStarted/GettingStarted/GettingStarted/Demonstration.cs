@@ -17,6 +17,8 @@ namespace GettingStarted {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Sprite casper;
+
         public Demonstration() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -43,6 +45,9 @@ namespace GettingStarted {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TO DO: Load content here.
+            Texture2D ghostTexture = Content.Load<Texture2D>("Ghost");
+            casper = new Sprite(ghostTexture);
+            casper.Source = new Rectangle(0, 0, 40, 52);
         }
 
         /// <summary>
@@ -77,6 +82,11 @@ namespace GettingStarted {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TO DO: Draw here
+            spriteBatch.Begin();
+
+            casper.Draw(spriteBatch);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

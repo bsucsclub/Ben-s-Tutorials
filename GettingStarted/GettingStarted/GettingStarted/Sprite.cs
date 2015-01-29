@@ -19,7 +19,7 @@ namespace GettingStarted {
         #region Members
         protected Texture2D texture;
         protected Vector2 position = Vector2.Zero;
-        protected Rectangle? source = null;
+        protected Rectangle source = Rectangle.Empty;
         protected Color color = Color.White;
         protected float angle = 0.0f;
         protected Vector2 origin = Vector2.Zero;
@@ -76,7 +76,7 @@ namespace GettingStarted {
         /// <summary>
         /// Gets or sets the source rectangle of this sprite.
         /// </summary>
-        public Rectangle? Source {
+        public Rectangle Source {
             get {
                 return source;
             }
@@ -192,12 +192,16 @@ namespace GettingStarted {
         }
         #endregion
 
+
+        int currentSourceX = 0;
+        int currentSourceY = 0;
         /// <summary>
         /// Updates this sprite.
         /// </summary>
-        /// <param name="gmaeTime_">Elapsed game time.</param>
-        public virtual void Update(GameTime gmaeTime_) {
+        /// <param name="gameTime_">Elapsed game time.</param>
+        public virtual void Update(GameTime gameTime_) {
             // TO DO: Place update code here.
+            source.X = currentSourceX * 40;
         }
         /// <summary>
         /// Draws this sprite.
@@ -205,6 +209,7 @@ namespace GettingStarted {
         /// <param name="spriteBatch_">The SpriteBatch to draw with.</param>
         public virtual void Draw(SpriteBatch spriteBatch_) {
             // TO DO: Place draw code here.
+            spriteBatch_.Draw(Texture, Position, Source, Color);
         }
     }
 }
