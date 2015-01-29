@@ -70,6 +70,7 @@ namespace GettingStarted {
             }
 
             // TO DO: Update here
+            casper.Update(gameTime);
 
             base.Update(gameTime);
         }

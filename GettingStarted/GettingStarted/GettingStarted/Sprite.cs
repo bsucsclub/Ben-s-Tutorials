@@ -195,6 +195,7 @@ namespace GettingStarted {
 
         int currentSourceX = 0;
         int currentSourceY = 0;
+        int elapsedMS = 0;
         /// <summary>
         /// Updates this sprite.
         /// </summary>
@@ -203,7 +204,13 @@ namespace GettingStarted {
             // TO DO: Place update code here.
             source.X = currentSourceX * 40;
 
-
+            if (elapsedMS > 50) {
+                currentSourceX = (currentSourceX < 2) ? currentSourceX + 1 : 0;
+                elapsedMS = gameTime_.ElapsedGameTime.Milliseconds;
+            }
+            else {
+                elapsedMS += gameTime_.ElapsedGameTime.Milliseconds;
+            }
         }
         /// <summary>
         /// Draws this sprite.
