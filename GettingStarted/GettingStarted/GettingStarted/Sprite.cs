@@ -2,6 +2,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace GettingStarted {
     /// <summary>
@@ -12,8 +13,9 @@ namespace GettingStarted {
         ///  Creates a sprite instance.
         /// </summary>
         /// <param name="texture_"></param>
-        public Sprite(Texture2D texture_) {
+        public Sprite(Game game_, Texture2D texture_) {
             texture = texture_;
+            game = game_;
         }
 
         #region Members
@@ -26,6 +28,7 @@ namespace GettingStarted {
         protected Vector2 scale = Vector2.One;
         protected SpriteEffects effects = SpriteEffects.None;
         protected float drawDepth = 0.0f;
+        protected Game game;
         #endregion
 
         #region Properties
@@ -194,8 +197,11 @@ namespace GettingStarted {
 
 
         int currentSourceX = 0;
-        int currentSourceY = 0;
+        int currentSourceY= 0;
         int elapsedMS = 0;
+        Vector2 velocity = Vector2.One * 10;
+        List<Vector2> previousPositions = new List<Vector2>();
+
         /// <summary>
         /// Updates this sprite.
         /// </summary>
@@ -204,9 +210,25 @@ namespace GettingStarted {
             // TO DO: Place update code here.
             source.X = currentSourceX * 40;
 
-            if (elapsedMS > 50) {
+            if (elapsedMS > 25) {
                 currentSourceX = (currentSourceX < 2) ? currentSourceX + 1 : 0;
                 elapsedMS = gameTime_.ElapsedGameTime.Milliseconds;
+
+                previousPositions.Add(position);
+                if (previousPositions.Count > 10) {
+                    previousPositions.RemoveAt(0);
+                }
+
+                position += velocity;
+
+                Viewport vp = game.GraphicsDevice.Viewport;
+                if (position.X <= 0 || position.X + source.Width >= vp.Width) {
+                    velocity.X *= -1;
+                }
+                if (position.Y <= 0 || position.Y + source.Height >= vp.Height) {
+                    velocity.Y *= -1;
+                }
+
             }
             else {
                 elapsedMS += gameTime_.ElapsedGameTime.Milliseconds;
@@ -219,6 +241,11 @@ namespace GettingStarted {
         public virtual void Draw(SpriteBatch spriteBatch_) {
             // TO DO: Place draw code here.
             spriteBatch_.Draw(Texture, Position, Source, Color);
+
+            for (int i = 0; i < previousPositions.Count; i++) {
+                Color color = new Color(1f, 1f, 1f, (float)i / previousPositions.Count);
+                spriteBatch_.Draw(Texture, previousPositions[i], Source, color);
+            }
         }
     }
 }
