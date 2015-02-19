@@ -16,8 +16,20 @@ namespace GettingStarted {
     public class Demonstration : Microsoft.Xna.Framework.Game {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        SpriteFont font;
+        List<Sprite> sprites = new List<Sprite>();
 
-        Sprite casper;
+        Texture2D casperTexture;
+
+        int score = 0;
+
+        public void IncrementScore() {
+
+        }
+        public void GameOver() {
+            Sprite bouncer = new BouncingSprite(this, casperTexture);
+            bouncer.Source = new Rectangle(0, 0, 40, 52);
+        }
 
         public Demonstration() {
             graphics = new GraphicsDeviceManager(this);
@@ -45,9 +57,11 @@ namespace GettingStarted {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TO DO: Load content here.
-            Texture2D ghostTexture = Content.Load<Texture2D>("Ghost");
-            casper = new PlayerControlledSprite(this, ghostTexture);
+            font = Content.Load<SpriteFont>("font");
+            casperTexture = Content.Load<Texture2D>("Ghost");
+            Sprite casper = new PlayerControlledSprite(this, casperTexture);
             casper.Source = new Rectangle(0, 0, 40, 52);
+            sprites.Add(casper);
         }
 
         /// <summary>
@@ -70,7 +84,9 @@ namespace GettingStarted {
             }
 
             // TO DO: Update here
-            casper.Update(gameTime);
+            for (int i = 0; i < sprites.Count; i++) {
+                sprites[i].Update(gameTime);
+            }
 
             base.Update(gameTime);
         }
@@ -81,12 +97,22 @@ namespace GettingStarted {
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
             // TO DO: Draw here
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
 
-            casper.Draw(spriteBatch);
+            for (int i = 0; i < sprites.Count; i++) {
+                sprites[i].Draw(spriteBatch);
+            }
+            spriteBatch.End();
 
+            // Print Score
+            spriteBatch.Begin();
+            spriteBatch.DrawString(
+                font, 
+                string.Format("Score: {0}", score), 
+                Vector2.Zero, 
+                Color.Black
+            );
             spriteBatch.End();
 
             base.Draw(gameTime);

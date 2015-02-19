@@ -1,25 +1,21 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace GettingStarted {
-    public class PlayerControlledSprite : Sprite {
-        public PlayerControlledSprite(Game game_, Texture2D texture_)
+    class BouncingSprite : Sprite {
+        public BouncingSprite(Game game_, Texture2D texture_)
             : base(game_, texture_) {
 
         }
 
         int currentSourceX = 0;
         int elapsedMS = 0;
-        Vector2 velocity = Vector2.One * 5;
+        Vector2 velocity = Vector2.One * 10;
         List<Vector2> previousPositions = new List<Vector2>();
-
-        bool left = true;
-        bool down = true;
 
         /// <summary>
         /// Updates this sprite.
@@ -28,21 +24,6 @@ namespace GettingStarted {
         public override void Update(GameTime gameTime_) {
             // TO DO: Place update code here.
             source.X = currentSourceX * 40;
-
-            KeyboardState kState = Keyboard.GetState();
-            if (kState.IsKeyDown(Keys.A)) {
-                left = true;
-            }
-            else if (kState.IsKeyDown(Keys.D)) {
-                left = false;
-            }
-
-            if (kState.IsKeyDown(Keys.W)) {
-                down = false;
-            }
-            else if (kState.IsKeyDown(Keys.S)) {
-                down = true;
-            }
 
             if (elapsedMS > 25) {
                 currentSourceX = (currentSourceX < 2) ? currentSourceX + 1 : 0;
@@ -53,15 +34,14 @@ namespace GettingStarted {
                     previousPositions.RemoveAt(0);
                 }
 
-                position.X += (left) ? -velocity.X : velocity.X;
-                position.Y += (down) ? velocity.Y : -velocity.Y;
+                position += velocity;
 
                 Viewport vp = game.GraphicsDevice.Viewport;
                 if (position.X <= 0 || position.X + source.Width >= vp.Width) {
-                    
+                    velocity.X *= -1;
                 }
                 if (position.Y <= 0 || position.Y + source.Height >= vp.Height) {
-                    
+                    velocity.Y *= -1;
                 }
             }
             else {
