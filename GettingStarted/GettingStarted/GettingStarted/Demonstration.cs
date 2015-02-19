@@ -46,7 +46,7 @@ namespace GettingStarted {
 
             // TO DO: Load content here.
             Texture2D ghostTexture = Content.Load<Texture2D>("Ghost");
-            casper = new Sprite(this, ghostTexture);
+            casper = new PlayerControlledSprite(this, ghostTexture);
             casper.Source = new Rectangle(0, 0, 40, 52);
         }
 
