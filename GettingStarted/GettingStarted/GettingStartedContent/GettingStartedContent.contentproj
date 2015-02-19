@@ -37,8 +37,20 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Green Crystal.png">
-      <Name>Green Crystal</Name>
+    <Compile Include="GreenCrystal.png">
+      <Name>GreenCrystal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Dirt.png">
+      <Name>Dirt</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Stone.png">
+      <Name>Stone</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
