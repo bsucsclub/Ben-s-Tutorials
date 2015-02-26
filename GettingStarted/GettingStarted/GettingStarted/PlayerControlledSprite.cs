@@ -15,11 +15,12 @@ namespace GettingStarted {
 
         int currentSourceX = 0;
         int elapsedMS = 0;
-        Vector2 velocity = Vector2.One * 5;
+        Vector2 velocity = Vector2.One * 2;
         List<Vector2> previousPositions = new List<Vector2>();
 
         bool left = true;
         bool down = true;
+        bool horizontal = true;
 
         /// <summary>
         /// Updates this sprite.
@@ -32,16 +33,20 @@ namespace GettingStarted {
             KeyboardState kState = Keyboard.GetState();
             if (kState.IsKeyDown(Keys.A)) {
                 left = true;
+                horizontal = true;
             }
             else if (kState.IsKeyDown(Keys.D)) {
                 left = false;
+                horizontal = true;
             }
 
-            if (kState.IsKeyDown(Keys.W)) {
+            else if (kState.IsKeyDown(Keys.W)) {
                 down = false;
+                horizontal = false;
             }
             else if (kState.IsKeyDown(Keys.S)) {
                 down = true;
+                horizontal = false;
             }
 
             if (elapsedMS > 25) {
@@ -53,8 +58,12 @@ namespace GettingStarted {
                     previousPositions.RemoveAt(0);
                 }
 
-                position.X += (left) ? -velocity.X : velocity.X;
-                position.Y += (down) ? velocity.Y : -velocity.Y;
+                if (horizontal) {
+                    position.X += (left) ? -velocity.X : velocity.X;
+                }
+                else {
+                    position.Y += (down) ? velocity.Y : -velocity.Y;
+                }
 
                 Viewport vp = game.GraphicsDevice.Viewport;
                 if (position.X <= 0 || position.X + source.Width >= vp.Width) {
