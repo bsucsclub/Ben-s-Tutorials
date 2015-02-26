@@ -18,8 +18,11 @@ namespace GettingStarted {
         SpriteBatch spriteBatch;
         SpriteFont font;
         List<Sprite> sprites = new List<Sprite>();
-
+        PlayerControlledSprite casper;
+        Sprite crystal;
         Texture2D casperTexture;
+
+
 
         int score = 0;
 
@@ -29,6 +32,7 @@ namespace GettingStarted {
         public void GameOver() {
             Sprite bouncer = new BouncingSprite(this, casperTexture);
             bouncer.Source = new Rectangle(0, 0, 40, 52);
+            sprites.Add(bouncer);
         }
 
         public Demonstration() {
@@ -59,9 +63,17 @@ namespace GettingStarted {
             // TO DO: Load content here.
             font = Content.Load<SpriteFont>("font");
             casperTexture = Content.Load<Texture2D>("Ghost");
-            Sprite casper = new PlayerControlledSprite(this, casperTexture);
+            casper = new PlayerControlledSprite(this, casperTexture);
             casper.Source = new Rectangle(0, 0, 40, 52);
+            casper.Position = new Vector2(200, 200);
             sprites.Add(casper);
+
+            crystal = new Crystal(this, Content.Load<Texture2D>("GreenCrystal"));
+            crystal.Source = new Rectangle(0, 0, 32, 64);
+            crystal.Position = new Vector2(300, 300);
+            sprites.Add(crystal);
+
+            
         }
 
         /// <summary>
@@ -88,6 +100,24 @@ namespace GettingStarted {
                 sprites[i].Update(gameTime);
             }
 
+            if (crystal.Contains(casper.Position) || 
+                crystal.Contains(casper.Position.X + casper.Source.Width, casper.Position.Y) ||
+                crystal.Contains(casper.Position.X, casper.Position.Y + casper.Source.Height) ||
+                crystal.Contains(casper.Position.X + casper.Source.Width, casper.Position.Y + casper.Source.Height))
+            {
+                casper.CurrentSize += 10;
+                casper.Velocity *= 1.1f;
+
+                Vector2 nextPos = new Vector2();
+                Random rgen = new Random();
+                do {
+                    nextPos.X = rgen.Next(0, GraphicsDevice.Viewport.Width - 32);
+                    nextPos.Y = rgen.Next(0, GraphicsDevice.Viewport.Height - 64);
+                } while (Vector2.Distance(nextPos, crystal.Position) < 100);
+                crystal.Position = nextPos;
+                casper.CheckCollisions();
+            }
+
             base.Update(gameTime);
         }
 
@@ -109,7 +139,7 @@ namespace GettingStarted {
             spriteBatch.Begin();
             spriteBatch.DrawString(
                 font, 
-                string.Format("Score: {0}", score), 
+                string.Format("Score: {0}", (casper.CurrentSize - 10) / 2), 
                 Vector2.Zero, 
                 Color.Black
             );

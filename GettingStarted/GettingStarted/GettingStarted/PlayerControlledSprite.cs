@@ -13,6 +13,24 @@ namespace GettingStarted {
 
         }
 
+        public int CurrentSize {
+            get {
+                return currentSize;
+            }
+            set {
+                currentSize = value;
+            }
+        }
+        public Vector2 Velocity {
+            get {
+                return velocity;
+            }
+            set {
+                velocity = value;
+            }
+        }
+
+        int currentSize = 25;
         int currentSourceX = 0;
         int elapsedMS = 0;
         Vector2 velocity = Vector2.One * 2;
@@ -21,12 +39,29 @@ namespace GettingStarted {
         bool left = true;
         bool down = true;
         bool horizontal = true;
+        bool isGameOver = false;
+
+        public void CheckCollisions() {
+            for (int i = 0; i < previousPositions.Count - 25; i++) {
+                var pos = previousPositions[i];
+                if (Contains(pos.X, pos.Y) || Contains(pos.X + source.Width, pos.Y) || Contains(pos.X, pos.Y + source.Height) ||
+                    Contains(pos.X + source.Width, pos.Y + source.Height)) {
+                    ((Demonstration)game).GameOver();
+                    isGameOver = true;
+                }
+                var t = Position;
+            }
+        }
 
         /// <summary>
         /// Updates this sprite.
         /// </summary>
         /// <param name="gameTime_">Elapsed game time.</param>
         public override void Update(GameTime gameTime_) {
+            if (isGameOver) {
+                return;
+            }
+
             // TO DO: Place update code here.
             source.X = currentSourceX * 40;
 
@@ -39,7 +74,6 @@ namespace GettingStarted {
                 left = false;
                 horizontal = true;
             }
-
             else if (kState.IsKeyDown(Keys.W)) {
                 down = false;
                 horizontal = false;
@@ -54,7 +88,7 @@ namespace GettingStarted {
                 elapsedMS = gameTime_.ElapsedGameTime.Milliseconds;
 
                 previousPositions.Add(position);
-                if (previousPositions.Count > 10) {
+                if (previousPositions.Count > currentSize) {
                     previousPositions.RemoveAt(0);
                 }
 
@@ -67,10 +101,12 @@ namespace GettingStarted {
 
                 Viewport vp = game.GraphicsDevice.Viewport;
                 if (position.X <= 0 || position.X + source.Width >= vp.Width) {
-                    
+                    ((Demonstration)game).GameOver();
+                    isGameOver = true;
                 }
                 if (position.Y <= 0 || position.Y + source.Height >= vp.Height) {
-                    
+                    ((Demonstration)game).GameOver();
+                    isGameOver = true;
                 }
             }
             else {
@@ -82,6 +118,9 @@ namespace GettingStarted {
         /// </summary>
         /// <param name="spriteBatch_">The SpriteBatch to draw with.</param>
         public override void Draw(SpriteBatch spriteBatch_) {
+            if (isGameOver) {
+                return;
+            }
             // TO DO: Place draw code here.
             spriteBatch_.Draw(Texture, Position, Source, Color);
 

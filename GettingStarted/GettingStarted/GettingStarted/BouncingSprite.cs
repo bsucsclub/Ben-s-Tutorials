@@ -14,7 +14,7 @@ namespace GettingStarted {
 
         int currentSourceX = 0;
         int elapsedMS = 0;
-        Vector2 velocity = Vector2.One * 10;
+        Vector2 velocity = Vector2.One * 50;
         List<Vector2> previousPositions = new List<Vector2>();
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace GettingStarted {
                 elapsedMS = gameTime_.ElapsedGameTime.Milliseconds;
 
                 previousPositions.Add(position);
-                if (previousPositions.Count > 10) {
+                if (previousPositions.Count > 100) {
                     previousPositions.RemoveAt(0);
                 }
 
